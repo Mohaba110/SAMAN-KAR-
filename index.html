@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#174a36">
+  <meta name="description" content="سامان‌کار؛ سیستم شخصی مدیریت کار، پروژه، پیگیری و نتیجه">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <title>سامان‌کار</title>
+</head>
+<body>
+  <a class="skip-link" href="#app-main">رفتن به محتوای اصلی</a>
+
+  <header class="app-header">
+    <div class="header-copy">
+      <p class="eyebrow" id="today-label"></p>
+      <h1 id="screen-title">امروز</h1>
+    </div>
+    <div class="header-actions">
+      <button class="icon-button" id="search-button" type="button" aria-label="جست‌وجو">
+        <svg aria-hidden="true"><use href="#icon-search"></use></svg>
+      </button>
+      <button class="icon-button badge-button" id="inbox-button" type="button" aria-label="صندوق ورودی">
+        <svg aria-hidden="true"><use href="#icon-inbox"></use></svg>
+        <span class="count-badge is-hidden" id="inbox-badge">۰</span>
+      </button>
+      <button class="icon-button" id="settings-button" type="button" aria-label="تنظیمات">
+        <svg aria-hidden="true"><use href="#icon-settings"></use></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="app-main" class="app-main" tabindex="-1" aria-live="polite"></main>
+
+  <nav class="bottom-nav" aria-label="منوی اصلی">
+    <button class="nav-button is-active" type="button" data-page="today">
+      <svg aria-hidden="true"><use href="#icon-today"></use></svg>
+      <span>امروز</span>
+    </button>
+    <button class="nav-button" type="button" data-page="projects">
+      <svg aria-hidden="true"><use href="#icon-project"></use></svg>
+      <span>پروژه‌ها</span>
+    </button>
+    <button class="capture-button" id="capture-button" type="button" aria-label="ثبت سریع">
+      <svg aria-hidden="true"><use href="#icon-plus"></use></svg>
+    </button>
+    <button class="nav-button" type="button" data-page="followups">
+      <svg aria-hidden="true"><use href="#icon-clock"></use></svg>
+      <span>پیگیری‌ها</span>
+    </button>
+    <button class="nav-button" type="button" data-page="review">
+      <svg aria-hidden="true"><use href="#icon-review"></use></svg>
+      <span>مرور</span>
+    </button>
+  </nav>
+
+  <dialog class="sheet quick-sheet" id="capture-dialog">
+    <form method="dialog" class="sheet-shell" id="capture-form">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <header class="sheet-header">
+        <div>
+          <p class="eyebrow">فقط ثبت کن؛ مرتب‌سازی بعداً</p>
+          <h2>ثبت سریع</h2>
+        </div>
+        <button class="icon-button" value="cancel" aria-label="بستن" type="submit">
+          <svg aria-hidden="true"><use href="#icon-close"></use></svg>
+        </button>
+      </header>
+      <div class="sheet-content">
+        <label class="field field-large">
+          <span>چه چیزی یادت نرود؟ <b>ضروری</b></span>
+          <textarea id="capture-title" rows="3" maxlength="240" required autofocus placeholder="مثلاً: پیگیری قیمت نهایی میکسر از تأمین‌کننده"></textarea>
+        </label>
+        <label class="field">
+          <span>توضیح کوتاه <small>اختیاری</small></span>
+          <textarea id="capture-details" rows="2" maxlength="1000" placeholder="هر نکته‌ای که الان در ذهنت هست"></textarea>
+        </label>
+        <div class="capture-tools" aria-label="افزودن پیوست">
+          <button class="tool-button" id="voice-button" type="button">
+            <svg aria-hidden="true"><use href="#icon-mic"></use></svg>
+            <span>ضبط صدا</span>
+          </button>
+          <label class="tool-button" for="photo-input">
+            <svg aria-hidden="true"><use href="#icon-camera"></use></svg>
+            <span>عکس</span>
+          </label>
+          <label class="tool-button" for="file-input">
+            <svg aria-hidden="true"><use href="#icon-clip"></use></svg>
+            <span>فایل</span>
+          </label>
+          <input class="visually-hidden" id="photo-input" type="file" accept="image/*" capture="environment" multiple>
+          <input class="visually-hidden" id="file-input" type="file" multiple>
+        </div>
+        <div class="recording-status is-hidden" id="recording-status" role="status"></div>
+        <div class="attachment-chips" id="capture-attachments"></div>
+      </div>
+      <footer class="sheet-footer">
+        <button class="primary-button full-button" id="save-capture-button" type="button">
+          ثبت در ورودی
+          <svg aria-hidden="true"><use href="#icon-arrow"></use></svg>
+        </button>
+        <p class="form-hint">برای سرعت، فقط عنوان اجباری است.</p>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="sheet" id="action-dialog">
+    <div class="sheet-shell">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <header class="sheet-header">
+        <div>
+          <p class="eyebrow" id="action-kicker"></p>
+          <h2 id="action-title"></h2>
+        </div>
+        <button class="icon-button" id="close-action-dialog" aria-label="بستن" type="button">
+          <svg aria-hidden="true"><use href="#icon-close"></use></svg>
+        </button>
+      </header>
+      <div class="sheet-content" id="action-content"></div>
+      <footer class="sheet-footer is-hidden" id="action-footer"></footer>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <svg class="svg-defs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></symbol>
+    <symbol id="icon-inbox" viewBox="0 0 24 24"><path d="M4 4h16v14H4z"></path><path d="M4 13h4l2 3h4l2-3h4"></path></symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"></path></symbol>
+    <symbol id="icon-today" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18M8 14h3v3H8z"></path></symbol>
+    <symbol id="icon-project" viewBox="0 0 24 24"><path d="M4 5h6l2 2h8v12H4z"></path><path d="M8 12h8M8 15h6"></path></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6l4 2"></path></symbol>
+    <symbol id="icon-review" viewBox="0 0 24 24"><path d="M5 4h14v17H5z"></path><path d="M8 9h8M8 13h8M8 17h5M9 2h6v4H9z"></path></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+    <symbol id="icon-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"></path></symbol>
+    <symbol id="icon-camera" viewBox="0 0 24 24"><path d="M4 7h4l2-2h4l2 2h4v12H4z"></path><circle cx="12" cy="13" r="4"></circle></symbol>
+    <symbol id="icon-clip" viewBox="0 0 24 24"><path d="m8 12 6-6a4 4 0 1 1 6 6l-8 8a6 6 0 0 1-8-8l8-8"></path></symbol>
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></symbol>
+    <symbol id="icon-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7z"></path></symbol>
+    <symbol id="icon-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"></path></symbol>
+    <symbol id="icon-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></symbol>
+    <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"></path></symbol>
+    <symbol id="icon-warning" viewBox="0 0 24 24"><path d="M12 3 2 21h20z"></path><path d="M12 9v5M12 17h.01"></path></symbol>
+    <symbol id="icon-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path></symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 3h6l1 4H8zM6 7l1 14h10l1-14M10 11v6M14 11v6"></path></symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"></path></symbol>
+    <symbol id="icon-upload" viewBox="0 0 24 24"><path d="M12 17V5M7 10l5-5 5 5M4 20h16"></path></symbol>
+  </svg>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
